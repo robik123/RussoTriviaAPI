@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">TriviaAPI</string>
+    <string name="Welcome">Welcome to Russos Trivia.
+    This app was created by Mark Russo for SER210
+    This app was created on march 1, 2018</string>
+</resources>
