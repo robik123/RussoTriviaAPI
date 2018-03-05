@@ -11,7 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginLeft="130dp"
+        android:layout_marginLeft="0dp"
+        android:textSize="30dp"
+        android:textColor="#000"
         android:text="This will be the question" />
 
     <Button
@@ -20,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="400dp"
+        android:layout_marginTop="460dp"
         android:text="Answer!"
         />
 
@@ -29,10 +31,48 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginLeft="260dp"
-        android:layout_marginTop="400dp"
+        android:layout_marginLeft="240dp"
+        android:layout_marginTop="460dp"
         android:text="Next!"
         />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <RadioButton
+        android:id="@+id/option1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/answer_button"
+        android:layout_alignRight="@+id/answer_button"
+        android:layout_below="@+id/question"
+        android:layout_marginTop="120dp"
+        android:textColor="#000"
+        android:text="RadioButton" />
+
+    <RadioButton
+        android:id="@+id/option2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/option1"
+        android:layout_alignStart="@+id/option1"
+        android:layout_below="@+id/option1"
+        android:layout_marginTop="50dp"
+        android:textColor="#000"
+        android:text="RadioButton" />
+
+    <RadioButton
+        android:id="@+id/option3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/option2"
+        android:layout_alignStart="@+id/option2"
+        android:layout_below="@+id/option2"
+        android:textColor="#000"
+        android:layout_marginTop="52dp"
+        android:text="RadioButton" />
+
+    </RadioGroup>
 
 
 </RelativeLayout>
