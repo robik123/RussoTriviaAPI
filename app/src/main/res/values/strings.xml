@@ -3,4 +3,8 @@
     <string name="Welcome">Welcome to Russos Trivia.
     This app was created by Mark Russo for SER210
     This app was created on march 1, 2018</string>
+    <string name="HowTo"> Press play to begin the Trivia! The game will prompt you with a start button that
+    will give you your first question. After you have chosen an answer simply select the answer button to
+    check with yours. Press Next to move on to the next question</string>
+
 </resources>

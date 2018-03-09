@@ -34,6 +34,20 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
+    public void HowtoPlay(View view){
+        android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(this);
+        alert.setMessage(R.string.HowTo);
+        alert.setTitle("Welcome!!");
+        alert.setCancelable(true);
+        alert.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+        alert.show();
+
+    }
+
     public void onClickExit(View view){
         System.exit(1);
 

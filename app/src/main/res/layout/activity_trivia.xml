@@ -14,7 +14,7 @@
         android:layout_marginLeft="0dp"
         android:textSize="30dp"
         android:textColor="#000"
-        android:text="This will be the question" />
+        android:text="This will be your question" />
 
     <Button
         android:id="@+id/answer_button"
@@ -36,9 +36,21 @@
         android:text="Next!"
         />
 
+
+    <Button
+        android:id="@+id/start_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="140dp"
+        android:layout_marginTop="350dp"
+        android:text="START"
+        />
+
     <RadioGroup
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/radioGroup">
     <RadioButton
         android:id="@+id/option1"
         android:layout_width="wrap_content"
@@ -46,9 +58,10 @@
         android:layout_alignEnd="@+id/answer_button"
         android:layout_alignRight="@+id/answer_button"
         android:layout_below="@+id/question"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="150dp"
         android:textColor="#000"
-        android:text="RadioButton" />
+        android:checked="false"
+        android:text="Option 1" />
 
     <RadioButton
         android:id="@+id/option2"
@@ -59,7 +72,8 @@
         android:layout_below="@+id/option1"
         android:layout_marginTop="50dp"
         android:textColor="#000"
-        android:text="RadioButton" />
+        android:checked="false"
+        android:text="Option 2" />
 
     <RadioButton
         android:id="@+id/option3"
@@ -69,10 +83,19 @@
         android:layout_alignStart="@+id/option2"
         android:layout_below="@+id/option2"
         android:textColor="#000"
+        android:checked="false"
         android:layout_marginTop="52dp"
-        android:text="RadioButton" />
+        android:text="Option 3" />
 
     </RadioGroup>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="300px"
+        android:layout_height="300px"
+        android:layout_marginTop="150dp"
+        android:layout_marginLeft="220dp"
+        android:src="@drawable/trivia" />
 
 
 </RelativeLayout>

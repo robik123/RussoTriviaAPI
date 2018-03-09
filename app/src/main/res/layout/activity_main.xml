@@ -14,7 +14,7 @@
         android:layout_height="100dp"
         android:layout_alignLeft="@+id/imageButton4"
         android:layout_alignStart="@+id/imageButton4"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="180dp"
         android:onClick="onClickPlay"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_media_play"
@@ -37,6 +37,7 @@
         android:layout_alignEnd="@+id/Play"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/Play"
+        android:onClick="HowtoPlay"
         app:srcCompat="?android:attr/alertDialogIcon" />
 
     <ImageButton
@@ -53,7 +54,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="400dp"
-        android:layout_height="100dp"
+        android:layout_height="120dp"
         android:background="#ffe947"
         app:srcCompat="@drawable/title" />
 

@@ -21,6 +21,8 @@ public class CategoryActivity extends AppCompatActivity {
     final static String urlMusic = "https://qriusity.com/v1/categories/12/questions?page=2&limit=3";
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private boolean userSelection = false;
+    final TriviaActivity trivia = new TriviaActivity();
+
 
 
     @Override
@@ -33,6 +35,7 @@ public class CategoryActivity extends AppCompatActivity {
         //code to check if this checkbox is checked!
         CheckBox checkBox = (CheckBox) view;
         if(checkBox.isChecked()){
+
 
         }
     }

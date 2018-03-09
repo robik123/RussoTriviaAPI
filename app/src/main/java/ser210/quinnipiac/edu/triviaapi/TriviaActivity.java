@@ -7,6 +7,8 @@ package ser210.quinnipiac.edu.triviaapi;
  */
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -19,12 +21,9 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,10 +36,9 @@ public class TriviaActivity extends Activity {
     final static String urlFootball = "https://qriusity.com/v1/categories/9/questions?page=2&limit=3";
     final static String urlMusic = "https://qriusity.com/v1/categories/12/questions?page=2&limit=3";
     private final String LOG_TAG = MainActivity.class.getSimpleName();
-    private boolean userSelection = false;
-    private TextView question;
     private Button answer;
     private int position = 0;
+    private String urlInUse = urlMovies;
     final TriviaHandler trivia = new TriviaHandler();
 
     @Override
@@ -48,21 +46,33 @@ public class TriviaActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trivia);
 
-        Button btn = (Button) findViewById(R.id.next_button);
+        Button nxt = (Button) findViewById(R.id.next_button);
+        Button START = (Button) findViewById(R.id.start_button);
         answer = (Button) findViewById(R.id.answer_button);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        START.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new JSONTask().execute(urlMovies);
-                userSelection = true;
-                TextView option1btn = (TextView) findViewById(R.id.option1);
-                option1btn.setBackgroundColor(Color.WHITE);
-                TextView option2btn = (TextView) findViewById(R.id.option2);
-                option2btn.setBackgroundColor(Color.WHITE);
-                TextView option3btn = (TextView) findViewById(R.id.option3);
-                option3btn.setBackgroundColor(Color.WHITE);
+                new JSONTask().execute(urlInUse);
+                Button START = (Button) findViewById(R.id.start_button);
+                START.setVisibility(View.INVISIBLE);
+            }
+        });
 
+        nxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(position < 3) {
+                    new JSONTask().execute(urlInUse);
+                    TextView option1btn = (TextView) findViewById(R.id.option1);
+                    option1btn.setBackgroundColor(Color.WHITE);
+                    TextView option2btn = (TextView) findViewById(R.id.option2);
+                    option2btn.setBackgroundColor(Color.WHITE);
+                    TextView option3btn = (TextView) findViewById(R.id.option3);
+                    option3btn.setBackgroundColor(Color.WHITE);
+                }else {
+                    GameOver();
+                }
 
             }
         });
@@ -77,7 +87,7 @@ public class TriviaActivity extends Activity {
         protected String doInBackground(String... params) {
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
-            String year = null;
+            String triviaQuestion = null;
 
             //tries the URL
             try {
@@ -106,10 +116,14 @@ public class TriviaActivity extends Activity {
                 final  String option2 = jObj.getString("option2");
                 final  String option3 = jObj.getString("option3");
 
+//                String questionFactJsonString = getJsonStringFromBuffer(reader);
+//                triviaQuestion = TriviaHandler.getTriva(questionFactJsonString);
+
                 //changes the question when the user hits the next button
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        //sets question and button to proper spots
                             RadioButton option1btn = (RadioButton) findViewById(R.id.option1);
                             TextView question1 = (TextView) findViewById(R.id.question);
                             option1btn.setText(option1);
@@ -170,6 +184,7 @@ public class TriviaActivity extends Activity {
             return null;
         }
 
+        //excecutes task
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
@@ -186,6 +201,86 @@ public class TriviaActivity extends Activity {
 
             return buffer.toString();
 
+        }
+    }
+
+    //game over method to check if game has ended or if one set of qestions has ended
+    public void GameOver(){
+        if(urlInUse == urlMovies){
+            urlInUse = urlFootball;
+            position = 0;
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            alert.setMessage("Movie Trivia Has Ended Lets Try Sports!");
+            alert.setTitle("Movie Trivia Over");
+            alert.setCancelable(false);
+            alert.setPositiveButton("OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+            alert.setNegativeButton("Home", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+
+                }
+            });
+            alert.show();
+            TextView option1btn = (TextView) findViewById(R.id.option1);
+            option1btn.setBackgroundColor(Color.WHITE);
+            TextView option2btn = (TextView) findViewById(R.id.option2);
+            option2btn.setBackgroundColor(Color.WHITE);
+            TextView option3btn = (TextView) findViewById(R.id.option3);
+            option3btn.setBackgroundColor(Color.WHITE);
+            new JSONTask().execute(urlInUse);
+
+        } else if(urlInUse == urlFootball){
+            urlInUse = urlMusic;
+            position = 0;
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            alert.setMessage("Sports Trivia Has Ended Lets Try Music!!");
+            alert.setTitle("Sports Trivia Over");
+            alert.setCancelable(false);
+            alert.setPositiveButton("OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+            alert.setNegativeButton("Home", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+
+                }
+            });
+            alert.show();
+            TextView option1btn = (TextView) findViewById(R.id.option1);
+            option1btn.setBackgroundColor(Color.WHITE);
+            TextView option2btn = (TextView) findViewById(R.id.option2);
+            option2btn.setBackgroundColor(Color.WHITE);
+            TextView option3btn = (TextView) findViewById(R.id.option3);
+            option3btn.setBackgroundColor(Color.WHITE);
+            new JSONTask().execute(urlInUse);
+        }else if (urlInUse == urlMusic && position == 3){
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            alert.setMessage("Russo's Trivia Has Sadly Ended!!");
+            alert.setTitle("Trivia Over");
+            alert.setCancelable(false);
+            alert.setPositiveButton("OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+            alert.setNegativeButton("Home", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+
+                }
+            });
+            alert.show();
         }
     }
 }

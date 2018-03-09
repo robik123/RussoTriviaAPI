@@ -1,5 +1,6 @@
 package ser210.quinnipiac.edu.triviaapi;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,9 +10,11 @@ import org.json.JSONObject;
 
 public class TriviaHandler {
 
-    public static String getYearFact(String yearFactJsonStr) throws JSONException {
-        JSONObject yearFactJSONObj = new JSONObject(yearFactJsonStr);
-        return yearFactJSONObj.getString("question");
+    public static String getTriva(String questionJsonStr) throws JSONException {
+        JSONObject questionJSONObj = new JSONObject(questionJsonStr);
+        final String quiz = questionJSONObj.getString("question");
+
+        return quiz;
     }
 
 }
