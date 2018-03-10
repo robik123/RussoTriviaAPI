@@ -14,7 +14,7 @@
         android:layout_marginLeft="0dp"
         android:textSize="30dp"
         android:textColor="#000"
-        android:text="This will be your question" />
+        android:text="This Will Be Your Question Press Start to Begin" />
 
     <Button
         android:id="@+id/answer_button"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="460dp"
+        android:layout_marginTop="470dp"
         android:text="Answer!"
         />
 
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginLeft="240dp"
-        android:layout_marginTop="460dp"
+        android:layout_marginTop="470dp"
         android:text="Next!"
         />
 
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginLeft="140dp"
-        android:layout_marginTop="350dp"
+        android:layout_marginTop="470dp"
         android:text="START"
         />
 
@@ -58,7 +58,7 @@
         android:layout_alignEnd="@+id/answer_button"
         android:layout_alignRight="@+id/answer_button"
         android:layout_below="@+id/question"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="160dp"
         android:textColor="#000"
         android:checked="false"
         android:text="Option 1" />
@@ -86,6 +86,19 @@
         android:checked="false"
         android:layout_marginTop="52dp"
         android:text="Option 3" />
+
+
+        <RadioButton
+            android:id="@+id/option4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/option2"
+            android:layout_alignStart="@+id/option2"
+            android:layout_below="@+id/option3"
+            android:textColor="#000"
+            android:checked="false"
+            android:layout_marginTop="52dp"
+            android:text="Option 4" />
 
     </RadioGroup>
 

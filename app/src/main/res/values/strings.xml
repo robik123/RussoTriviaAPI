@@ -5,6 +5,17 @@
     This app was created on march 1, 2018</string>
     <string name="HowTo"> Press play to begin the Trivia! The game will prompt you with a start button that
     will give you your first question. After you have chosen an answer simply select the answer button to
-    check with yours. Press Next to move on to the next question</string>
+    check with yours. Press Next to move on to the next question
+    The Correct Answers are
+    1. C
+    2. A
+    3. A
+    4. D
+    5. A
+    6. D
+    7. A
+    8. B
+    9. D
+    </string>
 
 </resources>

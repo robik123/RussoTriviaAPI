@@ -4,6 +4,8 @@ package ser210.quinnipiac.edu.triviaapi;
  * Created by markrusso on 3/5/18.
  * Assignment 2 Part 2
  * SER210
+ * this class reads JSON data and gets
+ * questions and options from Trivia Handler
  */
 
 import android.app.Activity;
@@ -21,9 +23,11 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,14 +36,22 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class TriviaActivity extends Activity {
+    //Three urls used in the trivia
     final static String urlMovies = "https://qriusity.com/v1/categories/2/questions?page=2&limit=3";
     final static String urlFootball = "https://qriusity.com/v1/categories/9/questions?page=2&limit=3";
     final static String urlMusic = "https://qriusity.com/v1/categories/12/questions?page=2&limit=3";
     private final String LOG_TAG = MainActivity.class.getSimpleName();
-    private Button answer;
     private int position = 0;
     private String urlInUse = urlMovies;
-    final TriviaHandler trivia = new TriviaHandler();
+    private String triviaQuestion = null;
+    private String trivOption1 = null;
+    private String trivOption2 = null;
+    private String trivOption3 = null;
+    private String trivOption4 = null;
+    private int trivAnswer;
+    private JSONArray jobj;
+    JSONObject jsonObj = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +60,8 @@ public class TriviaActivity extends Activity {
 
         Button nxt = (Button) findViewById(R.id.next_button);
         Button START = (Button) findViewById(R.id.start_button);
-        answer = (Button) findViewById(R.id.answer_button);
 
+        //Starts the Trivia
         START.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,10 +71,11 @@ public class TriviaActivity extends Activity {
             }
         });
 
+        //Switches to next question
         nxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(position < 3) {
+                if (position < 3) {
                     new JSONTask().execute(urlInUse);
                     TextView option1btn = (TextView) findViewById(R.id.option1);
                     option1btn.setBackgroundColor(Color.WHITE);
@@ -70,103 +83,58 @@ public class TriviaActivity extends Activity {
                     option2btn.setBackgroundColor(Color.WHITE);
                     TextView option3btn = (TextView) findViewById(R.id.option3);
                     option3btn.setBackgroundColor(Color.WHITE);
-                }else {
+                    TextView option4btn = (TextView) findViewById(R.id.option4);
+                    option4btn.setBackgroundColor(Color.WHITE);
+                } else {
                     GameOver();
                 }
 
             }
         });
-
+        //Checks the answers
+        Button answer = findViewById(R.id.answer_button);
+        answer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkAnswer();
+            }
+        });
     }
 
 
     //Private class that implements the rest API
-    private class JSONTask extends AsyncTask<String, String, String> {
-
+    private class JSONTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
-            String triviaQuestion = null;
 
-            //tries the URL
+            //tries URL and connects
             try {
                 URL url = new URL(params[0]);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.connect();
-
-                //connects the url
                 InputStream in = urlConnection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(in));
+                String questionFactJsonString = getJsonStringFromBuffer(reader);
 
-                StringBuffer buffer = new StringBuffer();
-
-                String line = "";
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line);
+                //retirves data from Trivia Handler
+                triviaQuestion = TriviaHandler.getTrivia(questionFactJsonString);
+                trivOption1 = TriviaHandler.getOption1(questionFactJsonString);
+                trivOption2 = TriviaHandler.getOption2(questionFactJsonString);
+                trivOption3 = TriviaHandler.getOption3(questionFactJsonString);
+                trivOption4 = TriviaHandler.getOption4(questionFactJsonString);
+                try {
+                     trivAnswer = jsonObj.getInt("answers");
+                }catch(JSONException e){
+                     System.out.println("Sorry not and answer");
                 }
 
-                String finalJson = buffer.toString();
-
-                //retireves specific data from the api
-                final JSONArray arr = new JSONArray(finalJson);
-                final JSONObject jObj = arr.getJSONObject(position);
-                final String quiz = jObj.getString("question");
-                final  String option1 = jObj.getString("option1");
-                final  String option2 = jObj.getString("option2");
-                final  String option3 = jObj.getString("option3");
-
-//                String questionFactJsonString = getJsonStringFromBuffer(reader);
-//                triviaQuestion = TriviaHandler.getTriva(questionFactJsonString);
-
-                //changes the question when the user hits the next button
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //sets question and button to proper spots
-                            RadioButton option1btn = (RadioButton) findViewById(R.id.option1);
-                            TextView question1 = (TextView) findViewById(R.id.question);
-                            option1btn.setText(option1);
-                            question1.setText(quiz);
-
-                            TextView option2btn = (TextView) findViewById(R.id.option2);
-                            option2btn.setText(option2);
-
-                            TextView option3btn = (TextView) findViewById(R.id.option3);
-                            option3btn.setText(option3);
-
-                        answer.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                position ++;
-                                if(position == 1){
-                                    TextView option3btn = (TextView) findViewById(R.id.option3);
-                                    option3btn.setBackgroundColor(Color.CYAN);
-                                }
-                                if(position == 2){
-                                    TextView option1btn = (TextView) findViewById(R.id.option1);
-                                    option1btn.setBackgroundColor(Color.CYAN);
-                                }
-
-                                if(position == 3){
-                                    TextView option1btn = (TextView) findViewById(R.id.option1);
-                                    option1btn.setBackgroundColor(Color.CYAN);
-                                }
-                            }
-                        });
-
-                        }
-
-                });
-
-                return null;
-
                 //exceptions
-            }catch(JSONException e ){
+            } catch (JSONException e) {
                 e.printStackTrace();
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
-
             } finally {
                 if (urlConnection == null)
                     urlConnection.disconnect();
@@ -177,40 +145,56 @@ public class TriviaActivity extends Activity {
                         Log.e(LOG_TAG, "Error" + e.getMessage());
                         return null;
                     }
-
-
             }
-
-            return null;
+            return triviaQuestion;
         }
 
-        //excecutes task
+        //excecutes task and changes text of questions and options
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-        }
+            if (result != null && position < 3) {
+                Log.d(LOG_TAG, result);
+                TextView question1 = (TextView) findViewById(R.id.question);
+                question1.setText(triviaQuestion);
+                RadioButton option1btn = (RadioButton) findViewById(R.id.option1);
+                RadioButton option2btn = (RadioButton) findViewById(R.id.option2);
+                RadioButton option3btn = (RadioButton) findViewById(R.id.option3);
+                RadioButton option4btn = (RadioButton) findViewById(R.id.option4);
+                option1btn.setText(trivOption1);
+                option2btn.setText(trivOption2);
+                option3btn.setText(trivOption3);
+                option4btn.setText(trivOption4);
+                position++;
 
-        private String getJsonStringFromBuffer(BufferedReader br) throws Exception {
-            StringBuffer buffer = new StringBuffer();
-            String line;
-            while ((line = br.readLine()) != null) {
-                buffer.append(line + '\n');
+            } else if (position == 3) {
+                GameOver();
             }
-            if (buffer.length() == 0)
-                return null;
-
-            return buffer.toString();
-
         }
     }
 
+    private String getJsonStringFromBuffer(BufferedReader br) throws Exception {
+        StringBuffer buffer = new StringBuffer();
+        String line;
+        while ((line = br.readLine()) != null) {
+            buffer.append(line + '\n');
+        }
+        if (buffer.length() == 0)
+            return null;
+
+        return buffer.toString();
+
+    }
+
+
     //game over method to check if game has ended or if one set of qestions has ended
-    public void GameOver(){
-        if(urlInUse == urlMovies){
+    public void GameOver() {
+        if (urlInUse == urlMovies) {
             urlInUse = urlFootball;
             position = 0;
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
+            //alerts the user of a new set of questions starting
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setMessage("Movie Trivia Has Ended Lets Try Sports!");
             alert.setTitle("Movie Trivia Over");
             alert.setCancelable(false);
@@ -226,20 +210,14 @@ public class TriviaActivity extends Activity {
                 }
             });
             alert.show();
-            TextView option1btn = (TextView) findViewById(R.id.option1);
-            option1btn.setBackgroundColor(Color.WHITE);
-            TextView option2btn = (TextView) findViewById(R.id.option2);
-            option2btn.setBackgroundColor(Color.WHITE);
-            TextView option3btn = (TextView) findViewById(R.id.option3);
-            option3btn.setBackgroundColor(Color.WHITE);
             new JSONTask().execute(urlInUse);
 
-        } else if(urlInUse == urlFootball){
+        } else if (urlInUse == urlFootball) {
             urlInUse = urlMusic;
             position = 0;
 
+            //alerts the user of a new set of questions starting
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
             alert.setMessage("Sports Trivia Has Ended Lets Try Music!!");
             alert.setTitle("Sports Trivia Over");
             alert.setCancelable(false);
@@ -255,16 +233,11 @@ public class TriviaActivity extends Activity {
                 }
             });
             alert.show();
-            TextView option1btn = (TextView) findViewById(R.id.option1);
-            option1btn.setBackgroundColor(Color.WHITE);
-            TextView option2btn = (TextView) findViewById(R.id.option2);
-            option2btn.setBackgroundColor(Color.WHITE);
-            TextView option3btn = (TextView) findViewById(R.id.option3);
-            option3btn.setBackgroundColor(Color.WHITE);
             new JSONTask().execute(urlInUse);
-        }else if (urlInUse == urlMusic && position == 3){
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        } else if (urlInUse == urlMusic && position == 3) {
 
+            //alerts the user trivia has eneded
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setMessage("Russo's Trivia Has Sadly Ended!!");
             alert.setTitle("Trivia Over");
             alert.setCancelable(false);
@@ -283,4 +256,26 @@ public class TriviaActivity extends Activity {
             alert.show();
         }
     }
+
+    //checks for winner and sets the color of the radio button
+    public void checkAnswer() {
+        if (trivAnswer == 1) {
+            TextView option1btn = (TextView) findViewById(R.id.option1);
+            option1btn.setBackgroundColor(Color.CYAN);
+        }
+        if (trivAnswer == 2) {
+            TextView option2btn = (TextView) findViewById(R.id.option2);
+            option2btn.setBackgroundColor(Color.CYAN);
+        }
+
+        if (trivAnswer == 3) {
+            TextView option3btn = (TextView) findViewById(R.id.option3);
+            option3btn.setBackgroundColor(Color.CYAN);
+        }
+        if (trivAnswer == 4) {
+            TextView option4btn = (TextView) findViewById(R.id.option4);
+            option4btn.setBackgroundColor(Color.CYAN);
+        }
+    }
+
 }
