@@ -12,7 +12,7 @@ import org.json.JSONObject;
  */
 
 public class TriviaHandler {
-    public static int position = 0;
+    private static int position = 0;
     static String quiz;
     static String option1;
     static String option2;
@@ -21,6 +21,7 @@ public class TriviaHandler {
     static JSONObject answer;
 
 
+    //gets the trivia question at position 0 1 and 2 called in private class
     public static String getTrivia(String questionJsonStr) throws JSONException {
         if (position < 3) {
             JSONArray questionJSONObj = new JSONArray(questionJsonStr);
@@ -32,6 +33,7 @@ public class TriviaHandler {
         return quiz;
     }
 
+    //gets option1 for questions 1 2 and 3 called in private class
     public static String getOption1(String questionJsonStr) throws JSONException {
         JSONArray questionJSONObj = new JSONArray(questionJsonStr);
         JSONObject jObj = questionJSONObj.getJSONObject(position);
@@ -39,6 +41,7 @@ public class TriviaHandler {
         return option1;
     }
 
+    //gets option2 for questions 1 2 and 3 called in private class
     public static String getOption2(String questionJsonStr) throws JSONException {
         JSONArray questionJSONObj = new JSONArray(questionJsonStr);
         JSONObject jObj = questionJSONObj.getJSONObject(position);
@@ -46,6 +49,7 @@ public class TriviaHandler {
         return option2;
     }
 
+    //gets option3 for questions 1 2 and 3 called in private class
     public static String getOption3(String questionJsonStr) throws JSONException {
         JSONArray questionJSONObj = new JSONArray(questionJsonStr);
         final JSONObject jObj = questionJSONObj.getJSONObject(position);
@@ -53,6 +57,7 @@ public class TriviaHandler {
         return option3;
     }
 
+    //gets option4 for questions 1 2 and 3 called in private class
     public static String getOption4(String questionJsonStr) throws JSONException {
         JSONArray questionJSONObj = new JSONArray(questionJsonStr);
         JSONObject jObj = questionJSONObj.getJSONObject(position);
@@ -62,12 +67,5 @@ public class TriviaHandler {
             position = 0;
         }
         return option4;
-    }
-
-    public static JSONObject getAnswer(JSONObject answerJsonStr) throws JSONException {
-        JSONArray questionJSONObj = new JSONArray(answerJsonStr);
-        JSONObject jObj = questionJSONObj.getJSONObject(position);
-        answer = jObj.getJSONObject("answers");
-        return answer;
     }
 }

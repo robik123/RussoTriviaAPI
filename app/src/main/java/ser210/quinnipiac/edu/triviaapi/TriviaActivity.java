@@ -43,21 +43,19 @@ public class TriviaActivity extends Activity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private int position = 0;
     private String urlInUse = urlMovies;
-    private String triviaQuestion = null;
-    private String trivOption1 = null;
-    private String trivOption2 = null;
-    private String trivOption3 = null;
-    private String trivOption4 = null;
+    private String triviaQuestion;
+    private String trivOption1;
+    private String trivOption2;
+    private String trivOption3;
+    private String trivOption4;
     private int trivAnswer;
-    private JSONArray jobj;
-    JSONObject jsonObj = null;
+    JSONObject jsonObj;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trivia);
-
         Button nxt = (Button) findViewById(R.id.next_button);
         Button START = (Button) findViewById(R.id.start_button);
 
@@ -101,7 +99,6 @@ public class TriviaActivity extends Activity {
         });
     }
 
-
     //Private class that implements the rest API
     private class JSONTask extends AsyncTask<String, Void, String> {
         @Override
@@ -116,18 +113,18 @@ public class TriviaActivity extends Activity {
                 urlConnection.connect();
                 InputStream in = urlConnection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(in));
-                String questionFactJsonString = getJsonStringFromBuffer(reader);
+                String questionJsonString = getJsonStringFromBuffer(reader);
 
                 //retirves data from Trivia Handler
-                triviaQuestion = TriviaHandler.getTrivia(questionFactJsonString);
-                trivOption1 = TriviaHandler.getOption1(questionFactJsonString);
-                trivOption2 = TriviaHandler.getOption2(questionFactJsonString);
-                trivOption3 = TriviaHandler.getOption3(questionFactJsonString);
-                trivOption4 = TriviaHandler.getOption4(questionFactJsonString);
+                triviaQuestion = TriviaHandler.getTrivia(questionJsonString);
+                trivOption1 = TriviaHandler.getOption1(questionJsonString);
+                trivOption2 = TriviaHandler.getOption2(questionJsonString);
+                trivOption3 = TriviaHandler.getOption3(questionJsonString);
+                trivOption4 = TriviaHandler.getOption4(questionJsonString);
                 try {
-                     trivAnswer = jsonObj.getInt("answers");
-                }catch(JSONException e){
-                     System.out.println("Sorry not and answer");
+                    trivAnswer = jsonObj.getInt("answers");
+                } catch (JSONException e) {
+                    System.out.println("Sorry not and answer");
                 }
 
                 //exceptions
@@ -166,7 +163,6 @@ public class TriviaActivity extends Activity {
                 option3btn.setText(trivOption3);
                 option4btn.setText(trivOption4);
                 position++;
-
             } else if (position == 3) {
                 GameOver();
             }
@@ -187,7 +183,7 @@ public class TriviaActivity extends Activity {
     }
 
 
-    //game over method to check if game has ended or if one set of qestions has ended
+    //game over method to check if game has ended or if one set of qestions has ended and changes to new set
     public void GameOver() {
         if (urlInUse == urlMovies) {
             urlInUse = urlFootball;
