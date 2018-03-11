@@ -189,6 +189,7 @@ public class TriviaActivity extends Activity {
             urlInUse = urlFootball;
             position = 0;
 
+            //Prof. Ruby: any repeated code should go in a method that takes the variable part as parameters. (avoid repetetion for high quality code)
             //alerts the user of a new set of questions starting
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setMessage("Movie Trivia Has Ended Lets Try Sports!");
